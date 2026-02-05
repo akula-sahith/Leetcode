@@ -16,7 +16,7 @@ HEADERS = {
 
 QUERY = """
 query recentSubmissions {
-  recentSubmissionList(username: null) {
+  recentSubmissionList(username: "sahith_akula_08") {
     title
     titleSlug
     lang
@@ -25,6 +25,7 @@ query recentSubmissions {
   }
 }
 """
+
 
 response = requests.post(
     BASE_URL,
