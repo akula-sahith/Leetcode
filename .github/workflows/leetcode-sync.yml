@@ -22,12 +22,14 @@ jobs:
         run: |
           pip install requests
 
-      - name: Run sync script
-        env:
-          LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
-          LEETCODE_CSRF_TOKEN: ${{ secrets.LEETCODE_CSRF_TOKEN }}
-        run: |
-          python sync.py
+      -name: Run sync script
+  env:
+    LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
+    LEETCODE_CSRF_TOKEN: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+    LEETCODE_USERNAME: ${{ secrets.LEETCODE_USERNAME }}
+  run: |
+    python sync.py
+
 
       - name: Commit and push changes
         run: |
