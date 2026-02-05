@@ -2,7 +2,7 @@ name: Sync LeetCode Submissions
 
 on:
   schedule:
-    - cron: "* * * * *"   # runs every minute
+    - cron: "0 */3 * * *"   # runs every minute
   workflow_dispatch:
 
 jobs:
