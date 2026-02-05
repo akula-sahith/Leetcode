@@ -1,8 +1,13 @@
 import requests
 import os
+import sys
 
 BASE_URL = "https://leetcode.com/graphql"
-USERNAME = os.environ["LEETCODE_USERNAME"]
+
+USERNAME = os.environ.get("LEETCODE_USERNAME")
+if not USERNAME:
+    print("❌ LEETCODE_USERNAME not set")
+    sys.exit(1)
 
 HEADERS = {
     "Content-Type": "application/json",
@@ -19,7 +24,7 @@ HEADERS = {
 # ---------------------------
 LIST_QUERY = f"""
 query {{
-  recentSubmissionList(username: "sahith_akula_08") {{
+  recentSubmissionList(username: "{USERNAME}") {{
     id
     title
     titleSlug
@@ -29,8 +34,19 @@ query {{
 }}
 """
 
-list_res = requests.post(BASE_URL, headers=HEADERS, json={"query": LIST_QUERY})
+list_res = requests.post(
+    BASE_URL,
+    headers=HEADERS,
+    json={"query": LIST_QUERY},
+    timeout=15
+)
+
 list_data = list_res.json()
+
+if "errors" in list_data:
+    print("❌ Error fetching submission list:")
+    print(list_data["errors"])
+    sys.exit(1)
 
 subs = list_data["data"]["recentSubmissionList"]
 
@@ -56,10 +72,16 @@ for sub in subs:
     code_res = requests.post(
         BASE_URL,
         headers=HEADERS,
-        json={"query": CODE_QUERY, "variables": variables}
+        json={"query": CODE_QUERY, "variables": variables},
+        timeout=15
     )
 
     code_data = code_res.json()
+
+    if "errors" in code_data:
+        print(f"⚠️ Failed to fetch code for {sub['titleSlug']}")
+        continue
+
     code = code_data["data"]["submissionDetails"]["code"]
 
     folder = f"Java/{sub['titleSlug']}"
@@ -67,3 +89,5 @@ for sub in subs:
 
     with open(f"{folder}/Solution.java", "w", encoding="utf-8") as f:
         f.write(code)
+
+print("✅ LeetCode sync completed successfully")
