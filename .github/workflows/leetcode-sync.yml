@@ -1,0 +1,38 @@
+name: Sync LeetCode Submissions
+
+on:
+  schedule:
+    - cron: "* * * * *"   # runs every minute
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run sync script
+        env:
+          LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
+          LEETCODE_CSRF_TOKEN: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+        run: |
+          python sync.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "leetcode-bot"
+          git config --global user.email "leetcode-bot@users.noreply.github.com"
+          git add .
+          git commit -m "Sync LeetCode submissions" || echo "No changes"
+          git push
