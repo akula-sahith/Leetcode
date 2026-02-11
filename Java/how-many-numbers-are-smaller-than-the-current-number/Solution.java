@@ -1,6 +1,7 @@
 class Solution {
     public int[] smallerNumbersThanCurrent(int[] nums) {
-        return smallerNumber(nums);
+        // return smallerNumber(nums);
+        return solution2(nums);
     }
 
     //Brute force Solution
@@ -37,5 +38,24 @@ for (int i = 0; i < arr.length / 2; i++) {
    return ans;
 
   
+    }
+
+    public int[] solution2(int[] nums){
+        int[] sorted = nums.clone();
+        Arrays.sort(sorted); // ascending
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // First occurrence index = count of smaller numbers
+        for (int i = 0; i < sorted.length; i++) {
+            map.putIfAbsent(sorted[i], i);
+        }
+
+        int[] ans = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            ans[i] = map.get(nums[i]);
+        }
+
+        return ans;
     }
 }
