@@ -14,7 +14,7 @@ class Solution {
 
         while(left < right){
             int mid = left + (right - left)/2;
-            if(canMake(bloomDay,m,k,mid)){
+            if(canMake2(bloomDay,m,k,mid)){
                 right = mid;
             }else{
                 left = mid + 1;
@@ -54,5 +54,28 @@ class Solution {
         }
 
         return boques_made >= m;
+    }
+
+
+    //This is one more can make function
+    public boolean canMake2(int[] bloomDay, int m, int k, int day) {
+
+        int bouquets = 0;
+        int flowers = 0;
+
+        for (int d : bloomDay) {
+
+            if (d <= day) {
+                flowers++;
+                if (flowers == k) {
+                    bouquets++;
+                    flowers = 0;
+                }
+            } else {
+                flowers = 0;
+            }
+        }
+
+        return bouquets >= m;
     }
 }
