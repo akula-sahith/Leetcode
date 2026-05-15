@@ -1,21 +1,22 @@
 class Solution {
-    public static int kthSmallest(int[][] matrix, int k) {
-        int n = matrix.length;
-        int left = matrix[0][0];
-        int right = matrix[n - 1][n - 1];
+    public static int kthSmallest(int[][] nums, int k) {
+        // int n = matrix.length;
+        // int left = matrix[0][0];
+        // int right = matrix[n - 1][n - 1];
 
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-            int count = countLessEqual(matrix, mid);
+        // while (left < right) {
+        //     int mid = left + (right - left) / 2;
+        //     int count = countLessEqual(matrix, mid);
 
-            if (count < k) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
+        //     if (count < k) {
+        //         left = mid + 1;
+        //     } else {
+        //         right = mid;
+        //     }
+        // }
 
-        return left;
+        // return left;
+        return heapapproach(nums,k);
     }
 
     private static int countLessEqual(int[][] matrix, int x) {
