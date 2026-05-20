@@ -1,11 +1,12 @@
 class Solution {
     public int uniquePathsWithObstacles(int[][] grid) {
         // return recurrence(grid,0,0,grid.length,grid[0].length);
-        int[][] dp = new int[grid.length][grid[0].length];
-        for(int[] arr : dp){
-            Arrays.fill(arr,0);
-        }
-        return topDown(grid,0,0,grid.length,grid[0].length,dp);
+        // int[][] dp = new int[grid.length][grid[0].length];
+        // for(int[] arr : dp){
+        //     Arrays.fill(arr,0);
+        // }
+        // return topDown(grid,0,0,grid.length,grid[0].length,dp);
+        return bottomUp(grid);
     }
 
     //Recurrence
@@ -51,5 +52,34 @@ class Solution {
         return down + right;
     }
     //Bottom Up - Tabulation
+    public int bottomUp(int[][] grid){
+        int m = grid.length;
+        int n = grid[0].length;
+        if(grid[m-1][n-1]==1){
+            return 0;
+        }
+        int[][] dp = new int[m][n];
+        dp[m-1][n-1] = 1;
+        for(int i = (m - 1) ; i >= 0 ; i--){
+            for(int j = (n - 1) ; j >= 0 ; j--){
+                if(i==(m-1) && j==(n-1)){
+                    continue;
+                }
+                if(grid[i][j]==1){
+                    continue;
+                }
+                int down = 0;
+                int right = 0;
+                if(i<m-1){
+                    down = dp[i+1][j];
+                }
+                if(j<n-1){
+                    right = dp[i][j+1];
+                }
+                dp[i][j] = down + right;
+            }
+        }
+        return dp[0][0];
+    }
 
 }
